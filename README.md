@@ -44,4 +44,4 @@ panoramic radiographic image 만으로 임플란트 식립 위치를 진단하�
 
 2. Missing Tooth Regions Detection
 
-<img src="https://github.com/star77sa/Missing_Tooth_Detection/blob/main/Result_img/DETBEST" width="600" height="300">
+<img src="https://github.com/star77sa/Missing_Tooth_Detection/blob/main/Result_img/DETBEST.jpg" width="600" height="300">
