@@ -38,20 +38,20 @@ panoramic radiographic image 만으로 임플란트 식립 위치를 진단하�
 2. Missing Tooth Regions Detection: Faster R-CNN
 
 ## 결과
-1. Tooth Instance Segmentation
+### Tooth Instance Segmentation
 
 <img src="https://github.com/star77sa/Missing_Tooth_Detection/blob/main/Result_img/seg.jpg" width="600" height="300">
 
 |Model|AP[0.5]|AP[0.5:0.95]|
 |------|---|---|
-|Mask R-CNN|92.43|78.41|
+|Mask R-CNN|92.43%|78.41%|
 
 
 
-2. Missing Tooth Regions Detection
+### Missing Tooth Regions Detection
 
 <img src="https://github.com/star77sa/Missing_Tooth_Detection/blob/main/Result_img/DETBEST.jpg" width="600" height="300">
 
 |Model|AP[0.5]|AP[0.5:0.95]|
 |------|---|---|
-|Faster R-CNN|test|test|
+|Faster R-CNN|test%|test%|
