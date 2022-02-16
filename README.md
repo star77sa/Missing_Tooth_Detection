@@ -1,7 +1,7 @@
 # Missing_Tooth_Detection
 Missing Tooth Detection 논문 재구현
 
-<Code>
+## Code
 
 Tooth Instance Segmentation
 - train_seg2.py : train code / CNN 꿑팁 논문기반 lr 재설정
