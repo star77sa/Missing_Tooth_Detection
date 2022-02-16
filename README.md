@@ -15,7 +15,8 @@
 - pred_det.py : prediction code
 
 ## 과제설명
-### 과제목적 : panoramic radiographic image 만으로 임플란트 식립 위치를 진단하는 것
+### 과제목적 : 
+panoramic radiographic image 만으로 임플란트 식립 위치를 진단하는 것
 
 
 ### 과정 : 
