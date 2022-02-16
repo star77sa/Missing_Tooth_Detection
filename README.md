@@ -16,4 +16,7 @@
 
 ## 과제설명
 - 과제목적 : panoramic radiographic image 만으로 임플란트 식립 위치를 진단하는 것
-- 과정 : 1. ![image](https://user-images.githubusercontent.com/73769046/154214843-66ec88be-e563-40cf-ab4f-d9ccf0da53fa.png)
+- 과정 : 
+ ![image](https://user-images.githubusercontent.com/73769046/154214843-66ec88be-e563-40cf-ab4f-d9ccf0da53fa.png)
+ 1. Segmentation model 이 파노라마 이미지에서 치아를 segment 한 뒤 치아의 마스크를 생성
+ 2. Detection model 이 치아의 mask 를 인풋으로 하여 치아가 없는 지역을 예측
