@@ -74,7 +74,7 @@ def main():
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = 28
     # cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, '/SSD4/kyeongsoo/implant_code/output/retina_det_100000.pth') # item에 ~~~.pth 넣기
     # cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, '/SSD4/kyeongsoo/implant_code/output/m_det/_/model_0005999.pth') # item에 ~~~.pth 넣기
-    cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, '/SSD4/kyeongsoo/implant_code/output/det_faster/faster/model_0072499.pth')
+    cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, '/SSD4/kyeongsoo/implant_code/output/det_faster/faster/model_0005499.pth')
 
 
 

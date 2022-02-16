@@ -54,12 +54,12 @@ def main():
     # os.environ['CUDA_VISIBLE_DEVICES'] = 2
     
     #val
-    json_file_test = "/SSD4/kyeongsoo/implant/Empty_Detection/val/json/missing_teeth_inst.json"
-    image_root_test =  "/SSD4/kyeongsoo/implant/Empty_Detection/val/img"
+    # json_file_test = "/SSD4/kyeongsoo/implant/Empty_Detection/val/json/missing_teeth_inst.json"
+    # image_root_test =  "/SSD4/kyeongsoo/implant/Empty_Detection/val/img"
     
     #test
-    #json_file_test = "/SSD4/kyeongsoo/implant/Empty_Detection/test/json/missing_teeth_inst.json"
-    #image_root_test =  "/SSD4/kyeongsoo/implant/Empty_Detection/test/img"
+    json_file_test = "/SSD4/kyeongsoo/implant/Empty_Detection/test/json/missing_teeth_inst.json"
+    image_root_test =  "/SSD4/kyeongsoo/implant/Empty_Detection/test/img"
     
 
 

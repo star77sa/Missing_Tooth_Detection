@@ -10,6 +10,7 @@ import cv2
 import random
 import torch
 import copy
+import argparse
 
 ### import some common detectron2 utilities
 from detectron2 import model_zoo
@@ -59,23 +60,30 @@ def main():
 
     ### TRAINING
     cfg = get_cfg()
-    cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/retinanet_R_101_FPN_3x.yaml"))
+    cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml"))
+    # cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml"))
     cfg.DATASETS.TRAIN = ("train_dataset",)
     cfg.DATASETS.TEST = ()
     cfg.DATALOADER.NUM_WORKERS = 4
 
-    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Detection/retinanet_R_101_FPN_3x.yaml")  # Let training initialize from model zoo
+    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml")  # Let training initialize from model zoo
     # cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "/SSD4/kyeongsoo/implant_code/output/det_33000.pth") # 모델 가중치 불러오기
-    cfg.SOLVER.IMS_PER_BATCH = 16
+    # cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml")  # Let training initialize from model zoo
+    
+    cfg.SOLVER.IMS_PER_BATCH = 32
     cfg.SOLVER.BASE_LR = 0.01  # pick a good LR
     cfg.SOLVER.MAX_ITER = 100000    # 300 iterations seems good enough for this toy dataset; you will need to train longer for a practical dataset
+    
+    cfg.SOLVER.CHECKPOINT_PERIOD = 500
+
     cfg.SOLVER.STEPS = []        # do not decay learning rate
 
     cfg.SOLVER.LR_SCHEDULER_NAME = "WarmupCosineLR"  # WarmupCosineLR  or WarmupMultiStepLR## 스케줄러. 여러번 따로 할때도 사용?
-
+    
     cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512   # faster, and good enough for this toy dataset (default: 512)
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = 28  
-    cfg.OUTPUT_DIR = 'output_det/implantout'
+    # cfg.OUTPUT_DIR = 'output_det/implantout'
+    cfg.OUTPUT_DIR = args.output_dir+'faster'
 
     # cfg_file = yaml.safe_load(cfg.dump())
     # with open('configs/implant.yaml', 'w') as f:
@@ -85,13 +93,20 @@ def main():
     os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
     #trainer = DefaultTrainer(cfg) 
     trainer = CustomTrainer(cfg) 
-    trainer.resume_or_load(resume=False)
+    # trainer.resume_or_load(resume=False)
+    trainer.resume_or_load(resume=args.output_dir+'/')
     trainer.train()
 
-    checkpointer = DetectionCheckpointer(trainer.model, save_dir="output")
-    checkpointer.save("retina_det_100000")
+    checkpointer = DetectionCheckpointer(trainer.model, save_dir="output/det/")
+    checkpointer.save("det_100000_faster")
 
-main()
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description = 'Detection')
+    
+    parser.add_argument('--output_dir', type=str, default='output/det_faster/')
+    args = parser.parse_args()
+    main()
 
 
 
