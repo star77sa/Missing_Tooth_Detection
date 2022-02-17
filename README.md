@@ -1,5 +1,7 @@
 # Missing_Tooth_Detection
-*Deep_Learning_based_Missing_Teeth_Detection_for_Dental_Implant_Planning_in_Panoramic_Radiographic_Images* 논문 재구현
+*Deep_Learning_based_Missing_Teeth_Detection_for_Dental_Implant_Planning_in_Panoramic_Radiographic_Images* 
+
+논문 재구현
 
 ## Code
 
