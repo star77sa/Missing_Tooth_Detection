@@ -49,13 +49,15 @@ panoramic radiographic image 만으로 임플란트 식립 위치를 진단하�
 |------|---|---|---|---|---|
 |논문|4|0.01|70000|91.14%|76.78%|
 |설정1|4|0.01|70000|91.72%|76.88%|
-|설정2|4|0.0015|10000|92.43%|78.41%|
+|설정2|4|**0.0015**|10000|92.43%|78.41%|
 
 
 ### Missing Tooth Regions Detection
 
 <img src="https://github.com/star77sa/Missing_Tooth_Detection/blob/main/Result_img/DETBEST.jpg" width="600" height="300">
 
-|Model|AP[0.5]|AP[0.5:0.95]|
-|------|---|---|
-|Faster R-CNN|test%|test%|
+|  |Batch Size|Learning Rate|Iterator|AP[0.5]|AP[0.5 : 0.95]|
+|------|---|---|---|---|---|
+|논문|32|0.01|100000|59.09%|20.40%|
+|설정1 Faster R-CNN|32|0.01|100000|56.23%|20.34%|
+|설정2 Retina Net|16|0.01|100000|56.47%|20.05%|
