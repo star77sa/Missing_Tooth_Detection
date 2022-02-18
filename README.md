@@ -1,5 +1,7 @@
 # Missing_Tooth_Detection
-*Deep_Learning_based_Missing_Teeth_Detection_for_Dental_Implant_Planning_in_Panoramic_Radiographic_Images* 논문 재구현
+*Deep_Learning_based_Missing_Teeth_Detection_for_Dental_Implant_Planning_in_Panoramic_Radiographic_Images* 
+
+논문 재구현
 
 ## Code
 
@@ -38,10 +40,20 @@ panoramic radiographic image 만으로 임플란트 식립 위치를 진단하�
 2. Missing Tooth Regions Detection: Faster R-CNN
 
 ## 결과
-1. Tooth Instance Segmentation
+### Tooth Instance Segmentation
 
 <img src="https://github.com/star77sa/Missing_Tooth_Detection/blob/main/Result_img/seg.jpg" width="600" height="300">
 
-2. Missing Tooth Regions Detection
+|Model|AP[0.5]|AP[0.5:0.95]|
+|------|---|---|
+|Mask R-CNN|92.43%|78.41%|
+
+
+
+### Missing Tooth Regions Detection
 
 <img src="https://github.com/star77sa/Missing_Tooth_Detection/blob/main/Result_img/DETBEST.jpg" width="600" height="300">
+
+|Model|AP[0.5]|AP[0.5:0.95]|
+|------|---|---|
+|Faster R-CNN|test%|test%|
