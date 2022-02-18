@@ -4,6 +4,7 @@
 논문 재구현
 
 ## Code
+- vis_utils.py : pred_seg / pred_det를 할 때 라벨링 이름 조정을 위한 코드
 
 ### Tooth Instance Segmentation
 - train_seg2.py : train code
