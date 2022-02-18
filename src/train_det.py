@@ -31,12 +31,10 @@ def custom_mapper(dataset_dict):
     image = utils.read_image(dataset_dict["file_name"], format='P')
     transform_list = [
         T.Resize((300,600)),
-    ]
-    
+    ]    
     image, transforms = T.apply_transform_gens(transform_list, image)
     # dataset_dict["image"] = torch.as_tensor(image.transpose(2, 0, 1).astype("float32"))
     dataset_dict["image"] = torch.as_tensor(image)
-
     annos = [
         utils.transform_instance_annotations(obj, transforms, image.shape[:2])
         for obj in dataset_dict.pop("annotations")
@@ -60,17 +58,18 @@ def main():
 
     ### TRAINING
     cfg = get_cfg()
-    cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml"))
+    # cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml"))
     # cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml"))
+    cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/retinanet_R_101_FPN_3x.yaml"))
     cfg.DATASETS.TRAIN = ("train_dataset",)
     cfg.DATASETS.TEST = ()
     cfg.DATALOADER.NUM_WORKERS = 4
 
-    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml")  # Let training initialize from model zoo
+    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Detection/retinanet_R_101_FPN_3x.yaml")  # Let training initialize from model zoo
     # cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "/SSD4/kyeongsoo/implant_code/output/det_33000.pth") # 모델 가중치 불러오기
     # cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml")  # Let training initialize from model zoo
     
-    cfg.SOLVER.IMS_PER_BATCH = 32
+    cfg.SOLVER.IMS_PER_BATCH = 16
     cfg.SOLVER.BASE_LR = 0.01  # pick a good LR
     cfg.SOLVER.MAX_ITER = 100000    # 300 iterations seems good enough for this toy dataset; you will need to train longer for a practical dataset
     
@@ -83,12 +82,11 @@ def main():
     cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512   # faster, and good enough for this toy dataset (default: 512)
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = 28  
     # cfg.OUTPUT_DIR = 'output_det/implantout'
-    cfg.OUTPUT_DIR = args.output_dir+'faster'
+    cfg.OUTPUT_DIR = args.output_dir+'retina'
 
     # cfg_file = yaml.safe_load(cfg.dump())
     # with open('configs/implant.yaml', 'w') as f:
     #     yaml.dump(cfg_file, f)
-
 
     os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
     #trainer = DefaultTrainer(cfg) 
@@ -96,25 +94,15 @@ def main():
     # trainer.resume_or_load(resume=False)
     trainer.resume_or_load(resume=args.output_dir+'/')
     trainer.train()
-
     checkpointer = DetectionCheckpointer(trainer.model, save_dir="output/det/")
-    checkpointer.save("det_100000_faster")
-
+    checkpointer.save("det_100000_retina")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description = 'Detection')
     
-    parser.add_argument('--output_dir', type=str, default='output/det_faster/')
+    parser.add_argument('--output_dir', type=str, default='output/det_retina/')
     args = parser.parse_args()
     main()
-
-
-
-
-
-
-
-
 
 # 임의의 train 이미지를 불러온다.
 

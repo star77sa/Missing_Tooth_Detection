@@ -32,12 +32,10 @@ def custom_mapper(dataset_dict):
     image = utils.read_image(dataset_dict["file_name"], format='P')
     transform_list = [
         T.Resize((300,600)),
-    ]
-    
+    ]    
     image, transforms = T.apply_transform_gens(transform_list, image)
     # dataset_dict["image"] = torch.as_tensor(image.transpose(2, 0, 1).astype("float32"))
     dataset_dict["image"] = torch.as_tensor(image)
-
     annos = [
         utils.transform_instance_annotations(obj, transforms, image.shape[:2])
         for obj in dataset_dict.pop("annotations")
@@ -53,13 +51,10 @@ class CustomPredictor(DefaultPredictor):
         return build_detection_test_loader(cfg, 'test' , custom_mapper)
 
 def main():
-
     cfg = get_cfg()
-    cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml"))
-    # cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/retinanet_R_101_FPN_3x.yaml"))
+    # cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml"))
+    cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/retinanet_R_101_FPN_3x.yaml"))
     # cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml"))
-
-
 
     cfg.DATASETS.TRAIN = ("train_dataset",)
     cfg.DATASETS.TEST = ()
@@ -69,10 +64,10 @@ def main():
     register_coco_instances("test", {}, "/SSD4/kyeongsoo/implant/Empty_Detection/test/json/missing_teeth_inst.json", "/SSD4/kyeongsoo/implant/Empty_Detection/test/img/")
 
     ### PREDICTION
-    # 여기 모델 가중치 불러옴. 원래 주석
- #   cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "/SSD4/kyeongsoo/implant_code/output/det_100000.pth") ## 이거 이름 바꿔가면서 하기!
-    cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, '/SSD4/kyeongsoo/implant_code/output/det_faster/faster/model_0005499.pth') # item에 ~~~.pth 넣기
-
+    # 모델 가중치
+    # cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "/SSD4/kyeongsoo/implant_code/output/det_100000.pth") ## 이거 이름 바꿔가면서 하기!
+    # cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, '/SSD4/kyeongsoo/implant_code/output/det_faster/faster/model_0005499.pth')
+    cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, '/SSD4/kyeongsoo/implant_code/output/det_retina/retina/model_0012499.pth')
     
     cfg.MODEL.ROI_HEADS.NMS_THRESH_TEST = 0.5
     cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5   # set the testing threshold for this model
@@ -95,7 +90,7 @@ def main():
     # im = cv2.imread(im["file_name"]) # 이거대로 하면 기껏 P로 바꾼거 RGB로 다시들어감..
     im = torch.as_tensor(utils.read_image(im['file_name'], format="P"))
     model = predictor.model
-    idx = 29 # 숫자 바꿔도 되나?
+    idx = 29 # 아무숫자?
     input = [{"image":im, "height":300, "width":600,"image_id":idx}]
     with torch.no_grad():
             outputs = model(input)
@@ -103,14 +98,13 @@ def main():
     # outputs = predictor(im)
     print(path['file_name'].split('/')[-1])
 
-    
     ##### 예측 결과를 이미지 위에 나타내준다.
     ori_img_path = '/SSD4/kyeongsoo/implant/Instance_Segmentation/test/'
     ori_img_path = os.path.join(ori_img_path, path['file_name'].split('/')[-1].split('.')[0]+'.jpg') ## 파노라마 이미지 위에 나타내기 위해서
     ori_img = detectron2.data.detection_utils.read_image(ori_img_path, format='BGR')
     ori_img = cv2.resize(ori_img, (600, 300))
     #####
-    #v = Visualizer2(im[:, :, ::-1], MetadataCatalog.get(cfg.DATASETS.TRAIN[0]), scale=1.2) # 마스크 위에 그리는 경우
+    #v = Visualizer2(im[:, :, ::-1], MetadataCatalog.get(cfg.DATASETS.TRAIN[0]), scale=1) # 마스크 위에 그리는 경우
     v = Visualizer2(ori_img, MetadataCatalog.get(cfg.DATASETS.TRAIN[0]), scale=1) # original 위에 그리는 경우
     v = v.draw_instance_predictions(outputs[0]["instances"].to("cpu"))
 
@@ -119,7 +113,7 @@ def main():
     print(MetadataCatalog.get(cfg.DATASETS.TRAIN[0]))
 
     # cv2.imshow('', v.get_image()[:, :, ::-1])
-    cv2.imwrite('/SSD4/kyeongsoo/implant_code/mdet100000.jpg', v.get_image()[:, :, ::-1]) # 이미지 저장
+    cv2.imwrite('/SSD4/kyeongsoo/implant_code/retina.jpg', v.get_image()[:, :, ::-1]) # 이미지 저장
     print("done")
 
 main()

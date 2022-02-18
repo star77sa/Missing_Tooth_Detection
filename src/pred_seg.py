@@ -62,7 +62,7 @@ def main():
 
     ### PREDICTION
     # 여기 모델 가중치 불러옴. 원래 주석
-    cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "/SSD4/kyeongsoo/implant_code/output/seg_35000.pth") ## 이거 이름 바꿔가면서 하기!
+    cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "/SSD4/kyeongsoo/implant_code/output/예전seg가중치/new_iter_70000.pth") ## 이거 이름 바꿔가면서 하기!
     cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.9   # set the testing threshold for this model
     cfg.DATASETS.TEST = ("inst_test", )
     cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512
@@ -75,21 +75,20 @@ def main():
     ### 파일 한개로 예측해보기 ###
     from detectron2.utils.visualizer import ColorMode
 
-    im = custom_mapper(dataset_dicts[7]) # valid에서 한장 꺼내와서 예측하기
+    im = custom_mapper(dataset_dicts[26]) # 한장 꺼내와서 예측하기
     im = cv2.imread(im["file_name"]) # RGB 이미지 일경우.
     outputs = predictor(im)
 
     # outputs = predictor(im)
     # 예측 결과를 이미지 위에 나타내준다.
-    v = Visualizer2(im[:, :, ::-1], MetadataCatalog.get(cfg.DATASETS.TRAIN[0]), scale=1.2) # Visualizer2면 #01, 02 이런식으로 뜨고, 1이면 %도 같이뜸!
+    v = Visualizer2(im[:, :, ::-1], MetadataCatalog.get(cfg.DATASETS.TRAIN[0]), scale=1) # Visualizer2면 #01, 02 이런식으로 뜨고, 1이면 %도 같이뜸!
+                                                                                        # + vis_utils.py 설정필요. seg, det 다르게
     v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-
     print(cfg.DATASETS.TRAIN[0])
-
     print(MetadataCatalog.get(cfg.DATASETS.TRAIN[0]))
 
     # cv2.imshow('', v.get_image()[:, :, ::-1])
-    cv2.imwrite('/SSD4/kyeongsoo/implant_code/new35000.jpg', v.get_image()[:, :, ::-1]) # 이미지 저장
+    cv2.imwrite('/SSD4/kyeongsoo/implant_code/SEG4.jpg', v.get_image()[:, :, ::-1]) # 이미지 저장
     print("done")
 
 main()

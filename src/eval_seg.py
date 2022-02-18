@@ -57,8 +57,6 @@ def main():
     json_file_test = "/SSD4/kyeongsoo/implant/Instance_Segmentation/test/coco_inst_teeth_test.json"
     image_root_test =  "/SSD4/kyeongsoo/implant/Instance_Segmentation/test/"
     
-
-
     register_coco_instances("test",{},json_file_test,image_root_test) # valid 데이터셋 등록
 
     cfg = get_cfg()
@@ -66,21 +64,19 @@ def main():
     cfg.DATASETS.TEST = ("test",)
     cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = 28
-    # cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, '/SSD4/kyeongsoo/implant_code/output/seg_35000.pth') # item에 ~~~.pth 넣기
-    # cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, '/SSD4/kyeongsoo/implant_code/output/예전seg가중치/lr_iter_10000BEST.pth') # item에 ~~~.pth 넣기
-    cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, '/SSD4/kyeongsoo/implant_code/output/final_seg_10000.pth') # item에 ~~~.pth 넣기
+    # cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, '/SSD4/kyeongsoo/implant_code/output/seg_35000.pth')
+    # cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, '/SSD4/kyeongsoo/implant_code/output/예전seg가중치/lr_iter_10000BEST.pth') 
+    cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, '/SSD4/kyeongsoo/implant_code/output/final_seg_10000.pth')
 
     predictor = CustomPredictor(cfg)
     evaluator = COCOEvaluator("test",{"bbox","segm"},False, output_dir = cfg.OUTPUT_DIR)
     # evaluator = PascalVOCDetectionEvaluator("test")
     
     test_loader = predictor.build_eval_loader(cfg)
-    results = detectron2.evaluation.inference_on_dataset(predictor.model, test_loader, evaluator) # 이 부분이 결과출력 부분인듯
+    results = detectron2.evaluation.inference_on_dataset(predictor.model, test_loader, evaluator) # 결과출력
     AP_seg = results['segm']['AP']
     print(results)
 
     print('done')
-
-
-
+    
 main()

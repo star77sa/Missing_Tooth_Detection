@@ -58,46 +58,32 @@ def main():
     #test
     json_file_test = "/SSD4/kyeongsoo/implant/Empty_Detection/test/json/missing_teeth_inst.json"
     image_root_test =  "/SSD4/kyeongsoo/implant/Empty_Detection/test/img"
-    
-
 
     register_coco_instances("test",{},json_file_test,image_root_test) # valid 데이터셋 등록
 
     cfg = get_cfg()
     
     # cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml"))
-    cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml"))
-    # cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/retinanet_R_101_FPN_3x.yaml"))
+    # cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml"))
+    cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/retinanet_R_101_FPN_3x.yaml"))
 
     cfg.DATASETS.TEST = ("test",)
     cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = 28
-    # cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, '/SSD4/kyeongsoo/implant_code/output/retina_det_100000.pth') # item에 ~~~.pth 넣기
-    # cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, '/SSD4/kyeongsoo/implant_code/output/m_det/_/model_0005999.pth') # item에 ~~~.pth 넣기
-    cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, '/SSD4/kyeongsoo/implant_code/output/det_faster/faster/model_0005499.pth')
-
-
-
+    # cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, '/SSD4/kyeongsoo/implant_code/output/retina_det_100000.pth')
+    # cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, '/SSD4/kyeongsoo/implant_code/output/m_det/_/model_0005999.pth')
+    # cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, '/SSD4/kyeongsoo/implant_code/output/det_faster/faster/model_0005499.pth')
+    cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, '/SSD4/kyeongsoo/implant_code/output/det_retina/retina/model_0039999.pth')
 
     predictor = CustomPredictor(cfg)
-    print("1")
     
     # evaluator = COCOEvaluator("test",{"bbox","segm"},False, output_dir = cfg.OUTPUT_DIR)
     evaluator = COCOEvaluator("test",{"bbox"},False, output_dir = cfg.OUTPUT_DIR)
-    
-    # evaluator = PascalVOCDetectionEvaluator("test")
-    
-    print("2")
+
     test_loader = predictor.build_eval_loader(cfg)
-    print("3")
-    results = detectron2.evaluation.inference_on_dataset(predictor.model, test_loader, evaluator) # 이 부분이 결과출력 부분인듯
-    print("4")
+    results = detectron2.evaluation.inference_on_dataset(predictor.model, test_loader, evaluator) # 결과출력
     # AP_seg = results['segm']['AP']
-    print("5")
     print(results)
-
     print('done')
-
-
 
 main()

@@ -30,7 +30,6 @@ def custom_mapper2(dataset_dict):
     image = utils.read_image(dataset_dict["file_name"], format='BGR')
     transform_list = [
         T.Resize((1000,2000))]
-    
     image, transforms = T.apply_transform_gens(transform_list, image)
     dataset_dict["image"] = torch.as_tensor(image.transpose(2, 0, 1).astype("float32"))
     # dataset_dict["image"] = torch.as_tensor(image)
@@ -52,7 +51,6 @@ def custom_mapper(dataset_dict):
         T.RandomBrightness(0.8, 1.2),
         T.RandomContrast(0.8, 1.2),
         T.RandomSaturation(0.8, 1.2)]
-    
     image, transforms = T.apply_transform_gens(transform_list, image)
     dataset_dict["image"] = torch.as_tensor(image.transpose(2, 0, 1).astype("float32"))
     # dataset_dict["image"] = torch.as_tensor(image)
@@ -92,7 +90,7 @@ def main():
     cfg.SOLVER.MAX_ITER = 10000    # 300 iterations seems good enough for this toy dataset; you will need to train longer for a practical dataset
     cfg.SOLVER.STEPS = []        # do not decay learning rate
 
-#    cfg.SOLVER.LR_SCHEDULER_NAME = "WarmupCosineLR"  # WarmupCosineLR  or WarmupMultiStepLR## 스케줄러. 여러번 따로 할때도 사용?
+    # cfg.SOLVER.LR_SCHEDULER_NAME = "WarmupCosineLR"  # WarmupCosineLR  or WarmupMultiStepLR # 스케줄러
 
     cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512   # faster, and good enough for this toy dataset (default: 512)
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = 28  
@@ -101,7 +99,6 @@ def main():
     # cfg_file = yaml.safe_load(cfg.dump())
     # with open('configs/implant.yaml', 'w') as f:
     #     yaml.dump(cfg_file, f)
-
 
     os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
     #trainer = DefaultTrainer(cfg) 
@@ -113,24 +110,6 @@ def main():
     checkpointer.save("final_seg_10000")
 
 main()
-
-
-
-
-
-
-
-
-################## 여기서 CNN 꿀팁 논문에서 러닝레이트를 0.0015로 하래서 했더니 엄청 잘나왔음.
-################# 배치사이즈에 따른 lr
-
-
-
-
-
-
-
-
 
 # 임의의 train 이미지를 불러온다.
 
