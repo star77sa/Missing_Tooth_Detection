@@ -4,6 +4,7 @@
 논문 재구현
 
 ## Code
+- vis_utils.py : pred_seg / pred_det를 할 때 라벨링 이름 조정을 위한 코드
 
 ### Tooth Instance Segmentation
 - train_seg2.py : train code
@@ -42,18 +43,24 @@ panoramic radiographic image 만으로 임플란트 식립 위치를 진단하�
 ## 결과
 ### Tooth Instance Segmentation
 
-<img src="https://github.com/star77sa/Missing_Tooth_Detection/blob/main/Result_img/seg.jpg" width="600" height="300">
+<img src="https://github.com/star77sa/Missing_Tooth_Detection/blob/main/Result_img/SEG1.jpg" width="600" height="300">
 
-|Model|AP[0.5]|AP[0.5:0.95]|
-|------|---|---|
-|Mask R-CNN|92.43%|78.41%|
-
+|  |Batch Size|Learning Rate|Iterator|AP[0.5]|AP[0.5 : 0.95]|
+|------------|---|---|---|---|---|
+|논문|4|0.01|70000|91.14%|76.78%|
+|설정1|4|0.01|70000|91.72%|76.88%|
+|설정2|4|**0.0015**|10000|92.43%|78.41%|
 
 
 ### Missing Tooth Regions Detection
 
 <img src="https://github.com/star77sa/Missing_Tooth_Detection/blob/main/Result_img/DETBEST.jpg" width="600" height="300">
 
-|Model|AP[0.5]|AP[0.5:0.95]|
-|------|---|---|
-|Faster R-CNN|test%|test%|
+|  |Batch Size|Learning Rate|Iterator|AP[0.5]|AP[0.5 : 0.95]|
+|------------|---|---|---|---|---|
+|논문|32|0.01|100000|59.09%|20.40%|
+|설정1 Faster R-CNN|32|0.01|100000|56.23%|20.34%|
+|설정2 Retina Net|16|0.01|100000|56.47%|20.05%|
+
+- Tooth Instance Segmentation의 경우는 하이퍼 파라미터 튜닝을 통해 더 좋은 성능을 내었다.
+- Missing Tooth Regions Detection의 경우는 논문과 근사하지만 59%의 성능을 내지는 못하였다.
